@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>promise例子</title>
+</head>
+<body ng-controller="appCtrl">
+<script src="http://cdn.staticfile.org/angular.js/1.2.0rc3/angular.min.js"></script>
+<script>
+    var app = angular.module('app', []);
+
+    app.factory('user', function ($q) {
+        return {
+            getName: function () {
+                var delay = $q.defer();
+                setTimeout(function() {
+                    delay.resolve([
+                        {name: 'jack'},
+                        {name: 'joe'}
+                    ]);
+                }, 1000);
+                return delay.promise;
+            },
+            getAge: function () {
+                var delay = $q.defer();
+                setTimeout(function() {
+                    delay.resolve([
+                        {age: '55'},
+                        {age: '11'}
+                    ]);
+                }, 3000);
+                return delay.promise;
+            }
+        }
+
+    });
+    app.controller('appCtrl', function($scope, user) {
+        alert('请留意控制台');
+        user.getName().then(function(data){
+            console.log(data);
+        });
+        user.getAge().then(function(data){
+            console.log(data);
+        });
+    });
+
+    angular.bootstrap(document, ['app']);
+</script>
+</body>
+</html>
