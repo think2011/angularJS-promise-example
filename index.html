@@ -9,37 +9,28 @@
     var app = angular.module('app', []);
 
     app.factory('user', function ($q) {
-        return {
-            getName: function () {
-                var delay = $q.defer();
-                setTimeout(function() {
-                    delay.resolve([
-                        {name: 'jack'},
-                        {name: 'joe'}
-                    ]);
-                }, 1000);
-                return delay.promise;
-            },
-            getAge: function () {
-                var delay = $q.defer();
-                setTimeout(function() {
-                    delay.resolve([
-                        {age: '55'},
-                        {age: '11'}
-                    ]);
-                }, 3000);
-                return delay.promise;
-            }
-        }
+        return function () {
+            // 声明一个promise
+            var delay = $q.defer();
+
+            setTimeout(function() {
+                // 取得数据后缓存到promise
+                delay.resolve([
+                    {name: 'jack'},
+                    {name: 'joe'}
+                ]);
+            }, 2000);
+
+            // 返回promise
+            return delay.promise;
+        }()
 
     });
+
     app.controller('appCtrl', function($scope, user) {
-        alert('请留意控制台');
-        user.getName().then(function(data){
+    	user.then(function (data) {
             console.log(data);
-        });
-        user.getAge().then(function(data){
-            console.log(data);
+            alert('我是在2秒后出现的，模拟2秒后才返回的ajax请求');
         });
     });
 
